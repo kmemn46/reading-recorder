@@ -1,13 +1,13 @@
-# 概要
+## 概要
 My Books ～読んだ本リスト～
 読書済みの書籍についてのコメント登録して一覧管理する簡単なSPAです。
 Google Books APIを使用して書籍情報を検索しています。
 
-# 使っているもの
-Vue cli
-Vue-router
-vuex-persistedstate
-vuetify
+## 使っているもの
+- Vue cli
+- Vue-router
+- vuex-persistedstate
+- vuetify
 
 ## Project setup
 ```
