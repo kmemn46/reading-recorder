@@ -5,20 +5,52 @@
     <BookInfo :book="book"></BookInfo>
     <hr />
     <v-container>
-      <v-row>
+      <!--<v-row>
         <v-col cols="12" sm="6">
         </v-col>
-      </v-row>
+      </v-row> -->
       <v-row>
+        <v-col cols="12" sm="6">
+          <v-rating
+            v-model="form.rating"
+            background-color="orange lighten-3"
+            color="orange"
+          ></v-rating>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-menu
+            v-model="menu2"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="form.read"
+                label="読了日"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="form.read"
+              @input="menu2 = false"
+            ></v-date-picker>
+          </v-menu>
+        </v-col>
         <v-col cols="12" sm="6">
           <v-textarea
           class="mx-2"
           label="感想"
-          rows="5"
+          rows="3"
           v-model="form.memo"
           :rules="memoRules"
           required
-        ></v-textarea>
+          ></v-textarea>
         </v-col>
       </v-row>
       <v-row>
@@ -46,17 +78,14 @@ export default {
       valid: true,
       book: {}, //選択中の書籍
       form: {
-        read: new Date(), // 読了日
+        read: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10), // 読了日
+        rating: 3,
         memo: ''          // 感想
       },
       memoRules: [
         v => !!v || '感想は必須入力です。',
       ],
-      // rules: {
-      //   memo: [
-      //     {required: true, message: 'メモが未入力です。', trigger: 'change' }
-      //   ]
-      // }
+      menu2: false,
     }
   },
   computed: mapGetters(['current', 'getBookById']),
@@ -75,6 +104,7 @@ export default {
     let b = this.getBookById(this.book.id)
     // 既にレビューが存在する場合はその内容をフォームに反映
     if (b) {
+      this.form.rating = b.rating
       this.form.read = b.read
       this.form.memo = b.memo
     }
@@ -95,8 +125,9 @@ export default {
         // 処理成功の通知メッセージを表示
         
         // フォームの内容をクリア
-        this.form.read = new Date()
-        this.form.memo= ''
+        this.form.read = (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+        this.form.memo = ''
+        this.form.rating = 3
         // トップページにリダイレクト
         this.$router.push('/')
       }
