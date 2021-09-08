@@ -41,7 +41,7 @@ export default {
 <style scoped>
 .linkable:hover {
     cursor: pointer;
-    background-color: #f7eb67;
+    background-color: #f5ed9b;
 }
 
 .image {

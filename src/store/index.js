@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
-import { UPDATE_CURRENT, UPDATE_BOOK, PAGE_SIZE } from '../mutation_types'
+import { UPDATE_CURRENT, UPDATE_BOOK, DELETE_BOOK, PAGE_SIZE } from '../mutation_types'
 
 Vue.use(Vuex)
 
@@ -56,7 +56,17 @@ export default new Vuex.Store({
         // 既存の情報がなければ新規レビューを登録
         state.books.push(payload)
       }
-    }
+    },
+    // レビュー情報を削除
+    [DELETE_BOOK](state, payload) {
+      // id値(payload.id)で既存のレビューを検索
+      let b = this.getters.getBookById(payload.id)
+      console.log(b);
+      if (b) {
+        // 既存のレビュー情報がある場合は削除
+        state.books.splice(b, 1)
+      }
+    },
   },
   // ミューテーションに対応する同名のアクション
   actions: {
@@ -65,6 +75,9 @@ export default new Vuex.Store({
     },
     [UPDATE_BOOK]({ commit }, payload) {
       commit(UPDATE_BOOK, payload)
+    },
+    [DELETE_BOOK]({ commit }, payload) {
+      commit(DELETE_BOOK, payload)
     }
   },
   // ストレージ保存のためのプラグインを有効化
